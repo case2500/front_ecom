@@ -7,9 +7,7 @@ import { getOrder } from "../../features/order/orderSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 
-import ReactToPrint from "react-to-print";
-import { render } from "react-dom";
-import ComponentToPrint from "./ComponentToPrint";
+
 
 import {
   // selectName,
