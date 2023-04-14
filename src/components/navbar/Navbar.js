@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { BiChevronDown } from "react-icons/bi";
 // import { CLEAR_CART } from "./../redux/features/cart/cartSlice.js";
 import { AiOutlineClose, AiOutlineMenu, AiOutlineSearch } from "react-icons/ai";
-import { Transition } from "@headlessui/react";
+
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
