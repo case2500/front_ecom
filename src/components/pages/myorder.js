@@ -7,7 +7,9 @@ import { getOrder } from "../../features/order/orderSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 
-
+//import ReactToPrint from "react-to-print";
+//import { render } from "react-dom";
+//import ComponentToPrint from "./ComponentToPrint";
 
 import {
   // selectName,
@@ -30,7 +32,7 @@ const Myorder = ({ match }) => {
   const user = useSelector(selectUser);
   const myorder = useSelector((state) => state.order);
 
-
+  let componentRef = useRef(null);
 
 
   const cancleorder = async (id) => {
@@ -141,8 +143,6 @@ const Myorder = ({ match }) => {
           <hr className="mb-10"></hr>
         </div>
       ))}
-
-
     </main>
   );
 };
