@@ -1,0 +1,176 @@
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RiHome2Fill } from "react-icons/ri";
+
+import {
+  FILTER_BY_BRAND,
+  // FILTER_BY_CATEGORY,
+  // FILTER_BY_PRICE,
+  // selectFilteredProducts,
+  // update_filteredProducts,
+  // selectMaxprice,
+  // GET_PRICE_RANGE,
+} from "../redux/features/product/filterSlice.js";
+
+// function
+import searchFilters from "../functions/product";
+// import { listCategory } from "../functions/category";
+import axios from 'axios'
+
+
+const ProductFilter = ({ FilteredProducts, AllFilteredProducts }) => {
+  const [category, setCategory] = useState([]);
+  const [brand, setBrand] = useState("All");
+  const [color, setColor] = useState("All");
+  const [shipping, setShipping] = useState("All");
+  const [price, setPrice] = useState("");
+  const dispatch = useDispatch();
+
+  const array = [];
+  const newarray = AllFilteredProducts.map((product) => {
+    const price = product.price;
+    return array.push(price);
+  });
+  const max = Math.max(...array);
+  const min = Math.min(...array);
+  const [ok, setOk] = useState(false);
+  // Category
+
+  const [categorySelect, setCategorySelect] = useState([]);
+
+  const allBrands = [
+    "All",
+    ...new Set(AllFilteredProducts.map((product) => product.brand)),
+  ];
+
+  const handleCheck = (e) => {
+    // ค่าปัจจุบันที่ Check
+    let inCheck = e.target.value;
+    alert(e.target.value)
+    // ค่าเดิมของ Check
+    let inState = [...categorySelect];
+
+    let findCheck = inState.indexOf(inCheck);
+
+    if (findCheck === -1) {
+      inState.push(inCheck);
+    } else {
+      inState.splice(findCheck, 1);
+    }
+    setCategorySelect(inState);
+    fetchDataFilter({ category: inState }); // [0,0]
+    // if(inState.length <1){
+    //   loadData()
+  };
+
+  // Filter
+  const fetchDataFilter = async(arg) => {
+    alert("fetchDataFilter=="+JSON.stringify(arg))
+
+    const response = await axios.get("http://localhost:5000/api/products", arg);
+    if (response) {
+      alert(JSON.stringify(response.data))
+         localStorage.setItem("user", JSON.stringify(response.data));
+    }else{
+      alert("error")
+    }
+
+  
+//  const res = axios.post(`http://localhost:5000/api/products` + "/search/filters", arg);
+//  alert("http://localhost:5000/api/products`"+JSON.stringify(arg))
+
+  };
+
+
+
+  const handlePrice = (value) => {
+    setPrice(value);
+
+    setTimeout(() => {
+      setOk(!ok);
+    }, 300);
+  };
+
+  useEffect(() => {
+    dispatch(FILTER_BY_BRAND({ AllFilteredProducts, brand, price }));
+  }, [dispatch, brand, price]);
+
+  const clearFilters = () => {
+    setCategory("All");
+    setBrand("All");
+    setPrice(max);
+  };
+  return (
+    <div className="">
+      <h1 className="text-red-500">Brand</h1>
+      <hr></hr>
+      {/* <RiHome2Fill className="text-red-500"></RiHome2Fill> */}
+
+      <div className="">
+        {/* {JSON.stringify(product)} */}
+        Filter / Search
+        <hr />
+        <h4>ค้นหาด้วยราคาสินค้า</h4>
+        <div value={price} onChange={handlePrice} range max={100000} />
+        <hr />
+        <h4>ค้นหาตามหมวดหมู่สินค้า</h4>
+        {allBrands.map((item, index) => (
+          <>
+            <ul>
+              <li>
+                <div className="flex flex-row">
+                  <input
+                    type="checkbox"
+                    onChange={handleCheck}
+                    value={item}
+                  />{" "}
+                   {item}
+                </div>
+              </li>
+            </ul>
+          </>
+        ))}
+      </div>
+      {/* {JSON.stringify(allBrands)} */}
+      <div className="">
+        {/* {allBrands.map((brand, index) => {
+          return (
+            <ul>
+              <li
+                key={index}
+                onClick={(e) => {
+                  setBrand(`${brand}`);
+                  alert(brand);
+                }}
+              >
+                {brand}
+              </li>
+            </ul>
+          );
+        })} */}
+        <h1 className="pt-5 text-red-500">Price </h1>
+        <hr></hr>
+        {min}-{max}
+        <div className="pt-2">
+          <input
+            type="range"
+            value={price}
+            onChange={(e) => setPrice(Number(e.target.value))} //***** ใส่ Numberด้วย
+            min={min}
+            max={max + 100}
+          />
+        </div>
+        <p> {`${price}`}</p>
+        <br />
+        <button
+          className="w-40 p-2 mx-auto border border-red-200"
+          onClick={clearFilters}
+        >
+          Clear Filter
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default ProductFilter;
