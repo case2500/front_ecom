@@ -21,6 +21,7 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper";
 
 import { simillar_products } from "./../data/products.js";
+import { getProducts } from "./../../features/product/productSlice";
 
 const ProductDetail = ({ match }) => {
   const { id } = useParams();
@@ -30,6 +31,17 @@ const ProductDetail = ({ match }) => {
   const [quantity, setQuantity] = useState(1);
   const product = [useSelector((state) => state.product.product)];
   const navigate = useNavigate();
+
+
+  // get products
+  const { products, isLoggedIn, isError, message } = useSelector(
+    (state) => state.product
+  );
+  const { user } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [isLoggedIn, isError, message, dispatch]);
 
   useEffect(() => {
     dispatch(getProduct(id));
@@ -48,13 +60,14 @@ const ProductDetail = ({ match }) => {
   return (
     <div className="w-full mx-auto">
       <div className="max-w-[1000px] bg-white min-h-[800px] mx-auto my-5 ">
-        {/* {JSON.stringify(product)} */}
         {product &&
           product.map((p, index) => (
-            <div key={index} className="flex flex-row pt-5 mx-20 ">
+            <div key={index} className="md:flex md:flex-row md:pt-5 md:mx-20 ">
               <img
                 src={p.images && p.images.length ? p.images[0].url : ""}
-                className="object-cover h-90 w-96 "
+              //  className="object-cover h-90 w-96 "
+              className="object-scale-down h-48 w-92 "
+                //object-scale-down h-48 w-full
               />
               <div className="flex flex-col mx-10 text-xl ">
                 <p className="">
@@ -97,7 +110,7 @@ const ProductDetail = ({ match }) => {
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-row my-5 ">
+                <div className="flex flex-row mx-auto my-5">
                   <div
                     className="px-2 text-center text-red-600 bg-white border border-red-500 w-14 hover:bg-red-400 hover:text-white hover:border-transparent"
                     onClick={() =>
@@ -117,17 +130,17 @@ const ProductDetail = ({ match }) => {
                   </div>
                 </div>
 
-                <div>
+                <div className="mx-auto my-1 ">
                   <button
-                    className="p-2 text-center text-white bg-red-700 border w-96 hover:bg-red-600 hover:text-white hover:border-transparent"
+                    className="w-64 p-2 text-center text-white bg-red-700 border md:border hover:bg-red-600 hover:text-white hover:border-transparent"
                     onClick={() => dispatch(addToCart({ ...p, quantity }))}
                   >
                     เพิ่มใส่รถเข็น
                   </button>
                 </div>
-                <div>
+                <div className="mx-auto my-1 ">
                   <button
-                    className="p-2 text-center text-white bg-orange-400 border w-96 hover:bg-orange-600 hover:text-white hover:border-transparent"
+                    className="w-64 p-2 text-center text-white bg-orange-400 border hover:bg-orange-600 md:border hover:text-white hover:border-transparent"
                     onClick={() => buycart(p, quantity)}
                   >
                     ซื้อสินค้า
@@ -174,10 +187,19 @@ const ProductDetail = ({ match }) => {
           },
         }}
       >
-        {simillar_products.map((p) => (
-          <SwiperSlide>
-            <Link href="">
-              <img src={p} alt="" />
+
+        {products.map((product,index) => (
+          <SwiperSlide >
+            <Link to={`/productdetail/${product._id}`}>
+            <img key={index}
+                    src={
+                      product.images && product.images.length
+                        ? product.images[0].url
+                        : ""
+                    }
+                    // src={product.image && product.image.filePath}
+                    className="object-cover w-16 h-16 pt-5 mx-auto md:h-32 md:w-64 "
+                  />
             </Link>
           </SwiperSlide>
         ))}

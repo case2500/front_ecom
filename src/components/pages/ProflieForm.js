@@ -19,9 +19,7 @@ const ProplieForm = ({ listuser, setIsEditing, isEditing,id }) => {
   //save change
   const saveProfile = async (e) => {
     e.preventDefault();
-
     const formData = {
-      // _id: id,
       name: profile.name,
       phone: profile.phone,
       address: profile.address,

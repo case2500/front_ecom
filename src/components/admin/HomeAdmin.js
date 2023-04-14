@@ -34,7 +34,7 @@ const HomeAdmin = () => {
   return (
     <div >
       <div className="flex flex-row ">
-        <div className="mx-32 my-10">
+        <div className="mx-20 my-10">
           <MenubarAdmin />
         </div>
         <Productadmin products={products}  />

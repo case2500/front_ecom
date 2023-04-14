@@ -26,7 +26,7 @@ export const updateOrder = createAsyncThunk(
   "cart/updateOrder",
   async (formData, thunkAPI) => {
     try {
-      alert("formData" + JSON.stringify(formData));
+
       return await axios.post(
         `${BACKEND_URL}/api/order/`+  `updateOrder`,
         formData
@@ -70,7 +70,7 @@ export const getOrder = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const response = await axios.get(`${BACKEND_URL}/api/order/`+id);
-     alert(JSON.stringify(response.data ));
+
       return response.data;
     } catch (error) {
       const message =

@@ -88,7 +88,7 @@ const FileUpload = ({ values, setValues, loading, setLoading }) => {
     <>
       <br />
       {/* {JSON.stringify(values.images)} */}
-      <div className="flex gap-2 my-2">
+      <div className="flex gap-2 my-1">
         {values.images &&
           values.images.map((c) => (
             <div>
@@ -111,10 +111,8 @@ const FileUpload = ({ values, setValues, loading, setLoading }) => {
             </div>
           ))}
       </div>
-
-      <hr />
-      <div className="form-group">
-        <label className="btn btn-primary">
+      <div className="mt-2">
+        <label className="px-5 py-2 mt-5 border border-red-700">
           Choose File...
           <input
             onChange={handleChangeFile}

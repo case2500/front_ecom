@@ -17,7 +17,6 @@ import { toast } from "react-toastify";
 const CreateCategory = () => {
   // const { user } = useSelector((state) => ({ ...state }));
 
-
   const [values, setValues] = useState({
     name: "",
   });
@@ -26,7 +25,6 @@ const CreateCategory = () => {
   const textuser = localStorage.getItem("token");
   const objuser = JSON.parse(textuser);
   const authtoken = objuser && objuser.token;
-
 
   useEffect(() => {
     loadData(authtoken);
@@ -43,16 +41,19 @@ const CreateCategory = () => {
   };
 
   const handleRemove = (id) => {
-    deleteCategory(authtoken, id)
-      .then((res) => {
-        console.log(res);
-        toast.success("Remove Data " + res.data.name + " Success!!!");
-        loadData(authtoken);
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error("Error!!! Insert Data");
-      });
+    // alert(id)
+
+    if (window.confirm("Are You Sure Delete!!")) {
+      deleteCategory(authtoken, id)
+        .then((res) => {
+          console.log(res);
+          loadData(authtoken);
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Error!!! Insert Data");
+        });
+    }
   };
 
   console.log("data", category);
@@ -63,13 +64,12 @@ const CreateCategory = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(e)
     createCategory(authtoken, values)
       .then((res) => {
         console.log(res);
+        setValues({ name: "" });
+        alert("สร้างหมวดหมู่เรียบร้อย")
         loadData(authtoken);
-        toast.success("Insert Data " + res.data.name + " Success!!!");
-        
       })
       .catch((err) => {
         console.log(err);
@@ -77,7 +77,7 @@ const CreateCategory = () => {
       });
   };
   return (
-    <div className="">
+ 
       <div className="flex flex-row ">
         <div className="mx-20 my-10">
           <MenubarAdmin />
@@ -138,7 +138,7 @@ const CreateCategory = () => {
           <hr></hr>
         </div>
       </div>
-    </div>
+  
   );
 };
 

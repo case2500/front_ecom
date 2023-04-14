@@ -53,18 +53,20 @@ const Home = () => {
   };
 
   const handleSubmit = (e) => {
+
     e.preventDefault();
-    alert(authtoken);
-    createProduct(authtoken, values)
+    try {
+        createProduct(authtoken, values)
       .then((res) => {
-        console.log(res);
-        toast.success("Insert " + res.data.title + " Success!!");
         window.location.reload();
       })
       .catch((err) => {
         console.log(err.response);
-        toast.error(err.response.data);
+        alert("เกิดข้อผิดพลาด ป้อนข้อมูลไม่ครบ")
       });
+    } catch (error) {
+      alert(error)
+    }
   };
 
   return (
@@ -142,10 +144,10 @@ const Home = () => {
             </div>
 
             <div className="mb-6 md:flex md:items-start">
-              <div className="w-20">
+              <div className="w-20 ">
                 <label>Category</label>
               </div>
-              <div className="md:w-1/3 md:items-start">
+              <div className="py-2 border border-red-600 md:w-1/3 md:items-start">
                   <select
                     className="form-control"
                     name="category"
@@ -186,7 +188,7 @@ const Home = () => {
               setValues={setValues}
             />
 
-            <button className="btn btn-primary">Submit</button>
+            <button className="px-5 py-1 border border-4 border-red-200">ตกลง</button>
           </form>
         </div>
       </div>

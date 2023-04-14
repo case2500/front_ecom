@@ -69,8 +69,6 @@ const UpdateProduct = () => {
     updateProduct(authtoken, values._id, values)
       .then((res) => {
         setLoading(false);
-        toast.success("Update " + res.data.title + " Success");
-        console.log(res);
         navigate("/admin/index");
       })
       .catch((err) => {

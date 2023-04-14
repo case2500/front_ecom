@@ -1,6 +1,6 @@
 
 
-export const BACKEND_URL = `https://node-ecommerce-three.vercel.app`;
+export const BACKEND_URL = `http://localhost:4000`;
 //authSlice
 export const API_URL_USERS = `${BACKEND_URL}/api/users/`;
 

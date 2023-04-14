@@ -13,7 +13,7 @@ const UpdateCategory = () => {
   const navigate = useNavigate();
   const param = useParams();
 
-  const textuser = localStorage.getItem("token");
+  const textuser = localStorage.getItem("user");
   const objuser = JSON.parse(textuser);
   const authtoken = objuser && objuser.token;
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -13,17 +13,15 @@ import {
 } from "../../features/cart/cartSlice.js";
 import { saveOrder } from "../../features/order/orderSlice.js";
 import ProflieForm from "./ProflieForm.js";
-import {BACKEND_URL} from "./../../configurl.js";
+import { BACKEND_URL } from "./../../configurl.js";
 
 const Payment = () => {
-
   const [listuser, setListuser] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
 
   const localStorageuser = localStorage.getItem("user");
   const objuser = JSON.parse(localStorageuser);
   const id = objuser && objuser._id;
-
 
   const getUserData = async (id) => {
     const response = await axios.get(`${BACKEND_URL}/api/users/` + id);
@@ -39,6 +37,8 @@ const Payment = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // alert(id);
+    getUserData(id);
     const localStorageuser = localStorage.getItem("user");
     const objuser = JSON.parse(localStorageuser);
     if (!objuser) {
@@ -96,7 +96,7 @@ const Payment = () => {
               <input
                 type="text"
                 name="email"
-                value={listuser?.username}
+                value={listuser?.email}
                 disabled
               />
             </div>
@@ -108,9 +108,9 @@ const Payment = () => {
             แก้ไข
             {isEditing}
           </button>
-        </div>id:{id}
-
-        <div className="grid grid-cols-7 ">
+        </div>
+        {/* id:{id} */}
+        <div className="md:grid md:grid-cols-7 ">
           <div className="grid col-span-5 ">
             <div className="flex flex-col gap-5 p-2 m-5">
               <div className="grid grid-cols-6 gap-5 text-gray-500">
@@ -122,52 +122,64 @@ const Payment = () => {
                 <p className="flex flex-row justify-center ">จำนวน</p>
                 <p className="flex flex-row justify-end ">รายการหน่วย</p>
               </div>
-{/* {JSON.stringify(cart)} */}
+              {/* {JSON.stringify(cart)} */}
               {cart.cart.map((p, index) => (
-                <div className="grid grid-cols-6 gap-3 " key={index}>
-                  <div>
-                    <img
-                      src={p.images && p.images.length ? p.images[0].url : ""}
-                      className="object-cover w-20 h-10 "
-                    />
-                  </div>
-                  <div className="flex flex-row justify-start ">{p.name}</div>
-                  <div className="flex flex-row justify-center ">
-                    {" "}
-                    {p.price}฿
-                  </div>
-
-                  {/* button - + */}
-                  <div className="flex flex-row ">
-                    <div
-                      className="text-center text-red-600 border border-red-500 w-14 max-h-7 hover:bg-red-400 hover:text-white hover:border-transparent"
-                      onClick={() => dispatch(decrementQuantity({ ...p }))}
-                    >
-                      -
-                    </div>
-                    <div className="text-center text-red-600 w-14 max-h-7 hover:border-transparent">
-                      {p.quantity}
-                    </div>
-                    <div
-                      className="text-center text-red-600 border border-red-500 w-14 max-h-7 hover:bg-red-400 hover:text-white hover:border-transparent"
-                      onClick={() => dispatch(incrementQuantity({ ...p }))}
-                    >
-                      +
-                    </div>
-                  </div>
-
-                  <div className="flex flex-row justify-end">
-                    {p.quantity * p.price}฿
-                  </div>
-                  <button
-                    className="w-20 mx-10 text-center text-red-600 border border-red-500 max-h-7 hover:bg-red-400 hover:text-white hover:border-transparent"
-                    onClick={() => dispatch(removeItem(p._id))}
+                <>
+                  <div
+                    className="grid grid-cols-5 gap-5 md:grid-cols-6 md:gap-5"
+                    key={index}
                   >
-                    ลบรายการ
-                  </button>
-                </div>
+                    <Link to={`/productdetail/${p._id}`}>
+                      <div>
+                        <img
+                          src={
+                            p.images && p.images.length ? p.images[0].url : ""
+                          }
+                          className="object-cover w-10 h-10 md:w-20 md:h-10"
+                        />
+                      </div>
+                    </Link>
+
+                    <div className="justify-start md:flex-row md:flex ">
+                      {p.name}
+                    </div>
+                    <div className="justify-center md:flex md:flex-row ">
+                      {" "}
+                      {p.price}฿
+                    </div>
+
+                    {/* button - + */}
+                    <div className="flex flex-row ">
+                      <div
+                        className="text-center text-red-600 border border-red-500 w-14 max-h-7 hover:bg-red-400 hover:text-white hover:border-transparent"
+                        onClick={() => dispatch(decrementQuantity({ ...p }))}
+                      >
+                        -
+                      </div>
+                      <div className="text-center text-red-600 w-14 max-h-7 hover:border-transparent">
+                        {p.quantity}
+                      </div>
+                      <div
+                        className="text-center text-red-600 border border-red-500 w-14 max-h-7 hover:bg-red-400 hover:text-white hover:border-transparent"
+                        onClick={() => dispatch(incrementQuantity({ ...p }))}
+                      >
+                        +
+                      </div>
+                    </div>
+
+                    <div className="flex flex-row justify-end">
+                      {p.quantity * p.price}฿
+                    </div>
+                    <button
+                      className="text-center text-red-600 border border-red-500 md:w-20 md:mx-10 max-h-7 hover:bg-red-400 hover:text-white hover:border-transparent"
+                      onClick={() => dispatch(removeItem(p._id))}
+                    >
+                      ลบ
+                    </button>
+                  </div>
+                  <hr></hr>
+                </>
               ))}
-              <hr></hr>
             </div>
           </div>
 

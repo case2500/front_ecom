@@ -1,10 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useRef }  from "react";
 import { useLoaderData, useParams } from "react-router-dom";
 import axios from "axios";
 import moment from "moment/min/moment-with-locales";
-import { API_URL_PRODUCT, URL, } from "../../configurl.js";
+import { API_URL_PRODUCT, URL } from "../../configurl.js";
 import { getOrder } from "../../features/order/orderSlice";
 import { useDispatch, useSelector } from "react-redux";
+
+
+import ReactToPrint from "react-to-print";
+import { render } from "react-dom";
+import ComponentToPrint from "./ComponentToPrint";
+
 import {
   // selectName,
   // SET_LOGIN,
@@ -12,6 +18,9 @@ import {
   selectUser,
 } from "../../features/auth/authSlice";
 import { toast } from "react-toastify";
+
+// import Invoice from "./../orderInvoice/Invoice.js";
+
 
 
 export const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -23,10 +32,13 @@ const Myorder = ({ match }) => {
   const user = useSelector(selectUser);
   const myorder = useSelector((state) => state.order);
 
+  let componentRef = useRef(null);
+
+
   const cancleorder = async (id) => {
     if (window.confirm("ยืนยันการยกเลิกสินค้า ?")) {
-    const data = await axios.put(URL+`order/` + id);
-    setList(!list);
+      const data = await axios.put(URL + `order/` + id);
+      setList(!list);
     }
   };
 
@@ -35,9 +47,16 @@ const Myorder = ({ match }) => {
   }, [dispatch, list, id, user]);
   return (
     <main className="max-w-[1000px]  mx-auto h-full mt-5">
+      {/* <Invoice myorder={myorder} /> */}
+
+
+
+
       {myorder.order.map((p, indexpro) => (
         <div key={indexpro}>
-          <div className="text-xl">เลขที่บิล : {p._id} {p.autobill}</div>
+          <div className="text-xl">
+            เลขที่บิล :  {p.autobill}
+          </div>
           <div>
             วันที่สั่งซื้อ :{" "}
             {moment(p.dateOrdered)
@@ -48,7 +67,7 @@ const Myorder = ({ match }) => {
           <div> ชื่อลูกค้า : {p.user.name}</div>
           <div>ที่อยู่ : {p.user.address}</div>
           <div>เลขที่ใบขนส่ง :</div>
-      
+
           <div>
             <hr></hr>
           </div>
@@ -124,6 +143,21 @@ const Myorder = ({ match }) => {
           <hr className="mb-10"></hr>
         </div>
       ))}
+
+<>
+      <div id="print_component">
+        {/* button to trigger printing of target component */}
+        <ReactToPrint
+          trigger={() => <button>Print this out!</button>}
+          content={() => componentRef}
+        />
+
+        {/* component to be printed */}
+        <div style={{ display: "none" }}>
+          <ComponentToPrint ref={(el) => (componentRef = el)} />
+        </div>
+      </div>
+    </>
     </main>
   );
 };

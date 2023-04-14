@@ -1,17 +1,15 @@
 import axios from "axios";
 
- import {API_URL_USERS,URL} from "../../configurl.js";
+ import {API_URL_USERS,URL,BACKEND_URL} from "../../configurl.js";
 // const API_URL_USERS = "http://localhost:5000/api/users/";
 
 export const updateuser = async (id,formData) => {
-   alert(JSON.stringify(formData+id))
-  // `http://localhost:4000/api/users/`,
   try {  
     const response = await axios.patch(   
-      API_URL_USERS + id,
+      `http://localhost:4000/api/users/` + id,
       formData
     );
-
+alert(JSON.stringify(response.data))
     return response.data;
   } catch (error) {
     const message =
@@ -24,8 +22,7 @@ export const updateuser = async (id,formData) => {
 
 // Register user http://localhost:4000/api/auth/register
 const register = async (userData) => {
-   alert(URL+`auth/register`)
-  const response = await axios.post(URL+`auth/register`, userData);
+  const response = await axios.post(BACKEND_URL+`/api/users/register`, userData);
   if (response.data) {
     localStorage.setItem("user", JSON.stringify(response.data));
   }
@@ -47,10 +44,8 @@ const getuserlist = async (id) => {
 
 // Login user
 const login = async (userData) => {
-//  alert(JSON.stringify(URL+`auth/login`))
-  const response = await axios.post(URL+`auth/login` , userData);
+  const response = await axios.post(BACKEND_URL+`/api/users/login` , userData);
   if (response.data) {
-    // alert(JSON.stringify(response.data))
        localStorage.setItem("user", JSON.stringify(response.data));
   }
   return response.data;

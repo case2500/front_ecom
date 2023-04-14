@@ -2,20 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import ReactPaginate from "react-paginate";
 import { getProducts } from "./../../features/product/productSlice";
-import { useNavigate } from "react-router-dom";
-import { listCategory } from "../functions/category";
+// import { useNavigate } from "react-router-dom";
+// import { listCategory } from "../functions/category";
 import AllProduct from "./AllProduct.js";
-import { selectUser } from "./../../features/auth/authSlice";
-import { Swiper, SwiperSlide } from "swiper/react";
-
+// import { selectUser } from "./../../features/auth/authSlice";
+// import { Swiper, SwiperSlide } from "swiper/react";
+import Productswiper from "./productswiper/productswiper";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { Navigation } from "swiper";
-
-import { simillar_products } from "./../data/products.js";
-import { Link } from "react-router-dom";
+// import { Navigation } from "swiper";
+// import { simillar_products } from "./../data/products.js";
+// import { Link } from "react-router-dom";
 
 const Home = () => {
   //   Begin Pagination
@@ -27,28 +26,22 @@ const Home = () => {
     const newOffset = (event.selected * itemsPerPage) % products.length;
     setItemOffset(newOffset);
   };
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  // Category
-  const [category, setCategory] = useState([]);
   //check token
   const textuser = localStorage.getItem("user");
   const objuser = JSON.parse(textuser);
   const authtoken = objuser && objuser.token;
 
   // get products
-  const { products, isLoggedIn, isError, message } = useSelector(
+  const { products, isError, message } = useSelector(
     (state) => state.product
   );
-  const { user } = useSelector((state) => state.auth);
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [ dispatch, isError, message]);
 
   useEffect(() => {
     dispatch(getProducts());
-  }, [isLoggedIn, isError, message, dispatch]);
-
-  useEffect(() => {
-    dispatch(getProducts());
-    listCategory().then((res) => setCategory(res.data));
   }, [dispatch]);
 
   useEffect(() => {
@@ -59,37 +52,18 @@ const Home = () => {
 
   return (
     <div>
-      <Swiper
-        slidesPerView={4}
-        spaceBetween={5}
-        slidesPerGroup={3}
-        navigation={true}
-        modules={[Navigation]}
-        // className="swiper simillar_swiper products__swiper"
-        breakpoints={{
-          640: {
-            width: 640,
-            slidesPerView: 5,
-          },
-        }}
-      >
-        {simillar_products.map((p) => (
-          <SwiperSlide>
-            <Link href="">
-              <img src={p} alt="" />
-            </Link>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-
-      {/* user: {JSON.stringify(user)} */}
+      <div className="flex justify-center ">
+        <h1 className="py-5 text-2xl text-red-500">สินค้าใหม่</h1>
+      </div>
+      {/* Swiper */}
+      <Productswiper products={products} />
+      {/* Product myh's,f */}
       <main className="max-w-[1240px]  mx-auto max-h-[550px] mt-5">
         <div className="flex">
           <div>
             <AllProduct currentItems={currentItems} />
           </div>
         </div>
-
         <ReactPaginate
           nextLabel="next"
           onPageChange={handlePageClick}

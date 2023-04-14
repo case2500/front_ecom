@@ -46,11 +46,13 @@ const Productadmin = ({products}) => {
     if (window.confirm("Delete ?")) {
       removeProduct(authtoken, id)
         .then((res) => {
-          toast.success("Deleted " + res.data.title + " Success!!");
+          alert("ลบข้อมูลเรียบร้อย");
+          window.location.reload();
+        
         })
         .catch((err) => {
-          toast.error("Remove Error");
           console.log(err);
+          alert("error")
         });
     }
   };

@@ -20,7 +20,7 @@ const Register = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setformData] = useState(initialState);
-  const { name, username, password, password2 } = formData;
+  const { name, email, password, password2 } = formData;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -30,14 +30,14 @@ const Register = () => {
   const registeruser = async (e) => {
     e.preventDefault();
 
-    if (!name || !username || !password) {
+    if (!name || !email || !password) {
       return toast.error("All fields are required");
     }
     if (password.length < 6) {
       return toast.error("Passwords must be up to 6 characters");
     }
-    // if (!validateusername(username)) {
-    //   return toast.error("Please enter a valid username");
+    // if (!validateemail(email)) {
+    //   return toast.error("Please enter a valid email");
     // }
     if (password !== password2) {
       return toast.error("Passwords do not match");
@@ -45,7 +45,7 @@ const Register = () => {
 
     const userData = {
       name,
-      username,
+      email,
       password,
     };
     setIsLoading(true);
@@ -96,11 +96,11 @@ const Register = () => {
               </label>
               <div className="flex flex-col items-start">
                 <input
-                  type="username"
-                  placeholder="username"
+                  type="email"
+                  placeholder="email"
                   required
-                  name="username"
-                  value={username}
+                  name="email"
+                  value={email}
                   onChange={handleInputChange}
                   className="block w-full mt-1 border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 />

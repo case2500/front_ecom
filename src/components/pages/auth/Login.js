@@ -10,13 +10,15 @@ import {
   reset,
 } from "./../../../features/auth/authSlice.js";
 
+import { loginUser, validateEmail } from "../../services/authService.js";
+
 function Login() {
   const [formData, setFormData] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
-  const {username, password } = formData;
+  const { email, password } = formData;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -24,7 +26,6 @@ function Login() {
   const textuser = localStorage.getItem("user");
   const objuser = JSON.parse(textuser);
   const authtoken = objuser && objuser.token;
-
 
   //check redirect to  navigate("/");
   // const { user, isError, isSuccess, message } = useSelector(
@@ -37,13 +38,12 @@ function Login() {
   // );
   // const {users} =  JSON.stringify(objuser)
   useEffect(() => {
-
     if (objuser && authtoken) {
       navigate("/");
     }
-    
+
     // dispatch(reset());
-  }, [dispatch,textuser]);
+  }, [dispatch, textuser]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -56,20 +56,21 @@ function Login() {
     e.preventDefault();
     // alert(e)
     const userData = {
-      username,
+      email,
       password,
     };
     try {
       // const data = await loginUser(userData);
+      const data =  await dispatch(login(userData));
       // console.log(data);
-      await dispatch(login(userData));
-      dispatch(SET_LOGIN(true));
+      await dispatch(SET_LOGIN(true));
       // alert(JSON.stringify(data))
-      // dispatch(SET_USER(data));
-      navigate("/login");
+      // if (data) {
+      //   localStorage.setItem("user", JSON.stringify(data));
+      // }
+      navigate("/");
     } catch (error) {
-      alert("username password ไม่ถูกต้อง");
-      navigate("/login");
+      alert(error);
     }
   };
 
@@ -86,15 +87,15 @@ function Login() {
           <form className="mt-2" onSubmit={onSubmit}>
             <div className="mb-2">
               <label className="block text-sm font-semibold text-gray-800">
-                Username
+                email
               </label>
               <input
                 type="text"
                 className="block w-full px-4 py-2 mt-2 text-red-700 bg-white border rounded-md focus:border-green-400 focus:ring-green-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                id="username"
-                name="username"
-                value={username}
-                placeholder="Enter your username"
+                id="email"
+                name="email"
+                value={email}
+                placeholder="Enter your email"
                 onChange={onChange}
               />
             </div>

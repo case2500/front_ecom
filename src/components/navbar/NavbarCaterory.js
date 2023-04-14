@@ -13,7 +13,7 @@ const NavbarCaterory = () => {
 
   return (
 
-      <div className="flex flex-row flex-wrap justify-center gap-5 py-2 mx-auto bg-red-100/50 ">
+      <div className="flex flex-row flex-wrap justify-center gap-5 py-2 mx-auto bg-gray-100/50 ">
         <Link to={`/`}>
           <div>รายการทั้งหมด</div>
         </Link>

@@ -235,7 +235,7 @@ const filterSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
       state.message = action.payload;
-      alert(JSON.stringify(action.payload));
+      // alert(JSON.stringify(action.payload));
       state.filteredProducts = action.payload;
 
     })

@@ -28,7 +28,7 @@ export const updateUser = createAsyncThunk(
   "auth/updateuser",
   async ({id,formData}, thunkAPI) => {
     try {
-
+      // alert(id)
       return await authService.updateuser(id,formData);
     } catch (error) {
       const message =
