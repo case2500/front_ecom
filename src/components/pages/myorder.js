@@ -142,20 +142,7 @@ const Myorder = ({ match }) => {
         </div>
       ))}
 
-<>
-      <div id="print_component">
-        {/* button to trigger printing of target component */}
-        <ReactToPrint
-          trigger={() => <button>Print this out!</button>}
-          content={() => componentRef}
-        />
 
-        {/* component to be printed */}
-        <div style={{ display: "none" }}>
-          <ComponentToPrint ref={(el) => (componentRef = el)} />
-        </div>
-      </div>
-    </>
     </main>
   );
 };
